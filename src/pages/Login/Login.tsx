@@ -6,20 +6,22 @@ import authService from "@/services/auth.service"
 import { EventInputChange, EventSubmit } from "@/types/DOMEvents.d.t"
 import { IUser, IUserLogin } from "@/types/user.d.t"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Login() {
   const [inputs, setInputs] = useState<IUserLogin>({
     email:"",
     password:""
   })
+  const navigate = useNavigate()
   const [user, fetchUser, loadingUser,errorUser] = useFetch<IUser>(succesLogin)
-
   const dispatch = useAppDispatch()
 
   function succesLogin(user:IUser){
     console.log("user",user)
     const clean = userAdapter(user);
     dispatch(setUser(clean))
+    // navigate("/")
   }
 
   function handleChange(e:EventInputChange){
@@ -34,7 +36,8 @@ export default function Login() {
   async function handleSubmit(e:EventSubmit) {
     e.preventDefault()
     if (inputs.email.length && inputs.password.length) {
-      await fetchUser(authService.login(inputs))
+      // await fetchUser(authService.login(inputs))
+      navigate("/")
     }
   }
 
