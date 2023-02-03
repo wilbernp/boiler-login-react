@@ -1,10 +1,9 @@
-import { IUser } from "@/types/user.d.t";
+import { IUser } from "@/types/user";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState:IUser = {
     email:"",
-    username:"",
-    token:""
+    username:""
 }
 
 const userSlice = createSlice({

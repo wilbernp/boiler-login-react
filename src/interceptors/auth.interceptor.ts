@@ -1,14 +1,18 @@
-import { clientAuth } from "@/config/clientAxios";
 import localStorageHandle from "@/utils/localStorage.handle";
+import { AxiosInstance } from "axios";
 
-clientAuth.interceptors.request.use(
-    (config) => {
-        if (!config.headers.Authorization) {
-            config.headers.Authorization = `Bearer ${localStorageHandle.getItem("token")}`
+export default { 
+    setToken: (axiosInstance:AxiosInstance) =>{
+    axiosInstance.interceptors.request.use(
+        (config) => {
+            if (!config.headers.Authorization) {
+                config.headers.Authorization = `Bearer ${localStorageHandle.getItem("token")}`
+            }
+            return config
+        },
+        (error) => {
+            throw new Error(error)
         }
-        return config
-    },
-    (error) => {
-        throw new Error(error)
-    }
-)
+    )
+}
+}
