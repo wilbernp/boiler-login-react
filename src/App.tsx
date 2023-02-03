@@ -8,7 +8,7 @@ import { IUser } from './types/user'
 import userAdapter from './adapters/user.adapter'
 
 import userService from './services/user.service'
-import { setUser } from './redux/states/user.slice'
+import { setIsAuth, setUser } from './redux/states/user.slice'
 import useAuth from './custom-hooks/useAuth'
 
 export default function App() {
@@ -19,13 +19,14 @@ export default function App() {
    const isAuth = useAuth({
     auth: "/auth/login",
     succesRedirect: "/",
-    excludes: ["/about"]
-  },[user.token])
+    // excludes: ["/about"]
+  },[user.isAuth])
 
   function succesProfile(profile: IUser) {
     const cleanData = userAdapter(profile)
     console.log("profile", profile)
     dispatch(setUser(cleanData))
+    dispatch(setIsAuth(true))
   }
 
   useEffect(() => {

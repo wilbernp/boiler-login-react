@@ -6,5 +6,8 @@ export default {
     },
     setItem<T>(key:string, value:T){
         localStorage.setItem(key,JSON.stringify(value))
+    },
+    deleteItem(key:string){
+        localStorage.removeItem(key)
     }
 }

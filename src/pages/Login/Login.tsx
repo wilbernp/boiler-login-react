@@ -1,7 +1,7 @@
 import userAdapter from "@/adapters/user.adapter"
 import useFetch from "@/custom-hooks/useFetch"
 import { useAppDispatch } from "@/redux/hooks"
-import { setToken, setUser } from "@/redux/states/user.slice"
+import { setIsAuth, setUser } from "@/redux/states/user.slice"
 import authService from "@/services/auth.service"
 import { EventInputChange, EventSubmit } from "@/types/DOMEvents"
 import { IUser, IUserLogin, ResponseLogin } from "@/types/user"
@@ -20,7 +20,7 @@ export default function Login() {
   function succesLogin(response:ResponseLogin){
     console.log("response",response)
     localStorageHandle.setItem("token",response.token)
-    dispatch(setToken(response.token))
+    dispatch(setIsAuth(true))
   }
 
   function handleChange(e:EventInputChange){

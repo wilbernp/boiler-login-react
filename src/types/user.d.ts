@@ -1,7 +1,7 @@
 export interface IUser {
     email: string;
     username: string;
-    token:string;
+    isAuth:boolean;
 }
 
 export interface IUserLogin {
