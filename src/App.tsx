@@ -1,37 +1,43 @@
 import React, { useEffect, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import ProtectedRoutes from './components/ProtectedRoutes/ProtectedRoutes'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import useFetch from './custom-hooks/useFetch'
 import Home from './pages/Home/Home'
 import Login from './pages/Login/Login'
-import { useAppDispatch } from './redux/hooks'
+import { useAppDispatch, useAppSelector } from './redux/hooks'
 import { IUser } from './types/user'
 import userAdapter from './adapters/user.adapter'
 
-import localStorageHandle from './utils/localStorage.handle'
 import userService from './services/user.service'
 import { setUser } from './redux/states/user.slice'
+import useAuth from './custom-hooks/useAuth'
 
 export default function App() {
   const dispatch = useAppDispatch()
+  const {user} = useAppSelector(state => state)
   const [profile, fetchProfile] = useFetch<IUser>(succesProfile)
-  function succesProfile(profile:IUser){
+  // const navigate = useNavigate()
+   const isAuth = useAuth({
+    auth: "/auth/login",
+    succesRedirect: "/",
+    excludes: ["/about"]
+  },[user.token])
+
+  function succesProfile(profile: IUser) {
     const cleanData = userAdapter(profile)
+    console.log("profile", profile)
     dispatch(setUser(cleanData))
   }
+
   useEffect(() => {
-    const token = localStorageHandle.getItem("token")
-    if (token) {
+    if (isAuth) {
       fetchProfile(userService.getProfile())
     }
-  }, [])
+  }, [isAuth])
   
   return (
     <Routes>
       <Route path='/'>
-        <Route element={<ProtectedRoutes/>}>
-          <Route path='/' element={<Home />} />
-        </Route>
+        <Route index element={<Home />} />
       </Route>
 
       <Route path='auth'>
