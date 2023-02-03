@@ -10,12 +10,12 @@ import userAdapter from './adapters/user.adapter'
 import userService from './services/user.service'
 import { setIsAuth, setUser } from './redux/states/user.slice'
 import useAuth from './custom-hooks/useAuth'
+import NoMatch from './pages/NoMatch/NoMatch'
 
 export default function App() {
   const dispatch = useAppDispatch()
   const {user} = useAppSelector(state => state)
   const [profile, fetchProfile] = useFetch<IUser>(succesProfile)
-  // const navigate = useNavigate()
    const isAuth = useAuth({
     auth: "/auth/login",
     succesRedirect: "/",
@@ -40,10 +40,13 @@ export default function App() {
       <Route path='/'>
         <Route index element={<Home />} />
       </Route>
-
+      {
+        !user.isAuth?
       <Route path='auth'>
         <Route path='login' element={<Login />} />
-      </Route>
+      </Route>:<></>
+      }
+      <Route path='*' element={<NoMatch/>}/>
     </Routes>
   )
 }

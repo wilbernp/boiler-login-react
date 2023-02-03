@@ -17,7 +17,7 @@ export default function useAuth(pathOptions:PathOptions,deps:React.DependencyLis
         return navigate(pathOptions.auth,{replace:true})
       }
       setIsAuth(true)
-      navigate(pathname === pathOptions.auth?pathOptions.succesRedirect:pathname)
+      navigate(pathname === pathOptions.auth?pathOptions.succesRedirect:pathname, {replace:true})
     }, [...deps])
 
     return isAuth
