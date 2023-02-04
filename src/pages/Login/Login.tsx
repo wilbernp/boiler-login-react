@@ -1,24 +1,21 @@
-import userAdapter from "@/adapters/user.adapter"
 import useFetch from "@/custom-hooks/useFetch"
 import { useAppDispatch } from "@/redux/hooks"
-import { setIsAuth, setUser } from "@/redux/states/user.slice"
+import { setIsAuth } from "@/redux/states/user.slice"
 import authService from "@/services/auth.service"
 import { EventInputChange, EventSubmit } from "@/types/DOMEvents"
-import { IUser, IUserLogin, ResponseLogin } from "@/types/user"
+import { IUserLogin, ResponseLogin } from "@/types/user"
 import localStorageHandle from "@/utils/localStorage.handle"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 
 export default function Login() {
   const [inputs, setInputs] = useState<IUserLogin>({
     email:"",
     password:""
   })
-  const [user, fetchUser, loadingUser,errorUser] = useFetch<ResponseLogin>(succesLogin)
+  const [fetchUser] = useFetch<ResponseLogin>(succesLogin)
   const dispatch = useAppDispatch()
 
   function succesLogin(response:ResponseLogin){
-    console.log("response",response)
     localStorageHandle.setItem("token",response.token)
     dispatch(setIsAuth(true))
   }

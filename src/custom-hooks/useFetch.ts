@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
 
-export default function useFetch<T>(cbSucces?:(data:T)=>void):[T|null,(axiosPromise: Promise<AxiosResponse<T>>)=>Promise<void>,boolean,string | null] {
+export default function useFetch<T>(cbSucces?:(data:T)=>void):[(axiosPromise: Promise<AxiosResponse<T>>)=>Promise<void>,T|null,boolean,string | null] {
 
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(false);
@@ -29,6 +29,6 @@ export default function useFetch<T>(cbSucces?:(data:T)=>void):[T|null,(axiosProm
     }, [data])
     
 
-    return [data, fetchData, loading, error]
+    return [fetchData, data, loading, error]
 
 }
