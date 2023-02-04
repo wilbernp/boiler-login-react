@@ -1,10 +1,10 @@
-import userAdapter from "@/adapters/user.adapter"
 import useFetch from "@/custom-hooks/useFetch"
 import { useAppDispatch } from "@/redux/hooks"
-import { setUser } from "@/redux/states/user.slice"
+import { setIsAuth } from "@/redux/states/user.slice"
 import authService from "@/services/auth.service"
-import { EventInputChange, EventSubmit } from "@/types/DOMEvents.d.t"
-import { IUser, IUserLogin } from "@/types/user.d.t"
+import { EventInputChange, EventSubmit } from "@/types/DOMEvents"
+import { IUserLogin, ResponseLogin } from "@/types/user"
+import localStorageHandle from "@/utils/localStorage.handle"
 import { useState } from "react"
 
 export default function Login() {
@@ -12,14 +12,12 @@ export default function Login() {
     email:"",
     password:""
   })
-  const [user, fetchUser, loadingUser,errorUser] = useFetch<IUser>(succesLogin)
-
+  const [fetchUser] = useFetch<ResponseLogin>(succesLogin)
   const dispatch = useAppDispatch()
 
-  function succesLogin(user:IUser){
-    console.log("user",user)
-    const clean = userAdapter(user);
-    dispatch(setUser(clean))
+  function succesLogin(response:ResponseLogin){
+    localStorageHandle.setItem("token",response.token)
+    dispatch(setIsAuth(true))
   }
 
   function handleChange(e:EventInputChange){
@@ -31,10 +29,10 @@ export default function Login() {
     })
   }
 
-  async function handleSubmit(e:EventSubmit) {
+ function handleSubmit(e:EventSubmit) {
     e.preventDefault()
     if (inputs.email.length && inputs.password.length) {
-      await fetchUser(authService.login(inputs))
+      fetchUser(authService.login(inputs))
     }
   }
 

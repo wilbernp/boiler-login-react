@@ -1,10 +1,7 @@
-import React from 'react'
+import { useAppSelector } from '@/redux/hooks'
 import { Navigate, Outlet } from 'react-router-dom'
 
-export default function ProtectedRoutes({ isAuth }: any) {
-    return (
-        <>
-            {isAuth ? <Outlet /> : <Navigate to="auth/login" replace />}
-        </>
-    )
+export default function ProtectedRoutes() {
+    const {email} = useAppSelector(state => state.user)
+      return email.length?<Outlet/>:<Navigate to="/auth/login" />
 }

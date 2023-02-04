@@ -1,10 +1,10 @@
-import { IUser } from "@/types/user.d.t";
+import { IUser } from "@/types/user";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState:IUser = {
     email:"",
     username:"",
-    token:""
+    isAuth:false
 }
 
 const userSlice = createSlice({
@@ -16,12 +16,18 @@ const userSlice = createSlice({
                 ...state,
                 ...action.payload
             }
+        },
+        setIsAuth:(state,action)=>{
+            return{
+                ...state,
+                isAuth:action.payload
+            }
         }
     }
 })
 
 
-export const {setUser} = userSlice.actions
+export const {setUser,setIsAuth} = userSlice.actions
 
 const userReducer = userSlice.reducer
 
